@@ -1,0 +1,85 @@
+from django.shortcuts import render, get_object_or_404
+from .models import Accident, Events, Tag
+from django.shortcuts import redirect
+from django.db.models import Max
+from .forms import PostForm, EventForm, LinkForm, PostFormEdit
+
+
+def accident_list(request):
+    accident = Accident.objects.select_related().order_by('created_date')
+    tags = Tag.objects.all()
+    return render(request, 'accident/accident_list.html', {'accident': accident, 'tags': tags})
+
+
+def accident_detail(request, pk):
+    accident = get_object_or_404(Accident, pk=pk)
+    events = Events.objects.filter(accident=pk).order_by('date_time')
+    tag = Tag.objects.filter(accident=pk)
+    last_date = events.aggregate(Max('date_time'))
+    return render(request, 'accident/accident_detail.html', {'events': events, 'tag': tag, 'accident': accident, 'last_date': last_date})
+
+
+def accident_new(request):
+    if request.method == "POST":
+        form = PostForm(request.POST)
+        if form.is_valid():
+            accident = form.save(commit=False)
+            accident.author = request.user
+            accident.save()
+            return redirect('accident_detail', pk=accident.id)
+    else:
+        form = PostForm()
+    return render(request, 'accident/accident_edit.html', {'form': form})
+
+
+def event_new(request, pk):
+    accident = get_object_or_404(Accident, id=pk)
+    if request.method == "POST":
+        form = EventForm(request.POST)
+        if form.is_valid():
+            event = Events()
+            event.event = form.cleaned_data['event_text']
+            event.accident = accident
+            event.save()
+            return redirect('accident_detail', pk=accident.pk)
+    else:
+        form = EventForm()
+    return render(request, 'accident/event_edit.html', {'form': form, 'accident': accident})
+
+
+def link_new(request, pk):
+    accident = get_object_or_404(Accident, id=pk)
+    if request.method == "POST":
+        form = LinkForm(request.POST)
+        if form.is_valid():
+            link = Tag()
+            link.tag_text = form.cleaned_data['tag_text']
+            link.accident = accident
+            link.link = form.cleaned_data['link']
+            link.save()
+            event = Events()
+            event.event = 'Прикреплен тикет ' + form.cleaned_data['tag_text']
+            event.accident = accident
+            event.save()
+            return redirect('accident_detail', pk=accident.pk)
+    else:
+        form = LinkForm()
+    return render(request, 'accident/link_edit.html', {'form': form, 'accident': accident})
+
+
+def accident_edit(request, pk):
+    accident = get_object_or_404(Accident, id=pk)
+    old_status = str(accident.status)
+    if request.method == "POST":
+        form = PostFormEdit(request.POST, instance=accident)
+        if form.is_valid():
+            accident = form.save()
+            new_status = str(form.cleaned_data['status'])
+            event = Events()
+            event.event = old_status + '->' + new_status
+            event.accident = accident
+            event.save()
+            return redirect('accident_detail', pk=accident.id)
+    else:
+        form = PostFormEdit(instance=accident)
+    return render(request, 'accident/accident_edit_form.html', {'form': form})

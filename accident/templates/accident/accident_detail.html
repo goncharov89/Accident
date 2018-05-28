@@ -1,0 +1,86 @@
+{% extends 'accident/base.html' %}
+
+
+{% block page_title %}
+
+    <title>{{ accident.headline }}</title>
+
+{% endblock %}
+
+
+{% block add_link %}
+    
+    <a href="{% url 'edit' pk=accident.id %}" class="top-menu"><span class="glyphicon glyphicon-pencil"></span></a>
+    <a href="{% url 'link_new' pk=accident.id %}" class="top-menu"><span class="glyphicon glyphicon-link"></span></a>
+    <a href="{% url 'event_new' pk=accident.id %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
+
+{% endblock %}
+
+
+{% block content %}
+
+    
+        Источник: {{ accident.source }}<br>
+        Автор: {{ accident.author }}<br>
+        Система: {{ accident.system }}<br>
+        Статус: {{ accident.status }}<br>
+        Дата последнего обновления: {{ last_date.date_time__max|date:"d.m.Y G:i:s" }}<br>
+        {% load accident_extras %}
+        Длительность : 
+        {% if accident.status.end_point %}
+
+            {{ accident.created_date|diff_date:last_date.date_time__max }}
+
+        {% else %}
+
+            {{ accident.created_date|diff_date }}
+
+        {% endif %}
+        <br>
+    
+
+    Метки: 
+    {% for post in tag %}
+        <a href = '{{ post.link }}' target="_blank">{{ post.tag_text}}</a>
+    {% endfor %}
+
+    <table border="0" class="table">
+    	<thead>
+    		<tr>
+    			<th>
+    				Номер
+    			</th>
+
+        		<th>
+        			Событие
+        		</th>
+
+        		<th>
+        			Время
+        		</th>
+
+                <th>
+                    Дата
+                </th>
+
+
+        	</tr>
+    	</thead>
+        {% for post in events %}
+                
+        	<tr>
+        		<td>{{ forloop.counter }}</td>
+        		<td>
+        			{{ post.event }}
+        		</td>
+        		<td>
+        			{{ post.date_time|date:"G:i:s" }}
+        		</td>
+                <td>
+                    {{ post.date_time|date:"d.m.Y" }}
+                </td>
+        	</tr>
+            
+        {% endfor %}
+        </table>
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends 'accident/base.html' %}
+
+{% block page_title %}
+
+    <title>Список аварий</title>
+
+{% endblock %}
+
+{% block add_link %}
+
+    <a href="{% url 'accident_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
+
+{% endblock %}
+
+
+{% block content %}
+<table border="0" class="table">
+	<thead>
+		<tr>
+			<th>
+				Номер
+			</th>
+
+    		<th>
+    			Заголовок
+    		</th>
+
+    		<th>
+    			Дата заведения
+    		</th>
+
+    		<th>
+    			Автор
+    		</th>
+
+            <th>
+                Статус
+            </th>
+
+            <th>
+                Система
+            </th>
+
+            <th>
+                Метки
+            </th>
+
+
+    	</tr>
+	</thead>
+    {% for post in accident %}
+            
+    	<tr>
+    		<td>{{ forloop.counter }}</td>
+    		<td>
+    			<a href="{% url 'accident_detail' pk=post.pk %}">{{ post.headline }}</a>
+    		</td>
+    		<td>
+    			{{ post.created_date|date:"d M Y, G:i" }}
+    		</td>
+    		<td>
+    			{{ post.author }}
+    		</td>
+            <td>
+                {{ post.status}}
+            </td>
+            <td>
+                {{ post.system }}
+            </td>
+            <td>
+
+               {% for tag in tags %}
+
+                    {% if tag.accident.id == post.id %}
+
+                        <a href = '{{ tag.link }}' target="_blank">{{ tag.tag_text }}</a><br>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </td>
+    	</tr>
+        
+    {% endfor %}
+    </table>
+{% endblock %}

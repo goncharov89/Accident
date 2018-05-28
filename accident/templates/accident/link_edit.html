@@ -1,0 +1,16 @@
+{% extends 'accident/base.html' %}
+
+{% block page_title %}
+
+    <title>Добавить метку</title>
+
+{% endblock %}
+
+{% block content %}
+    <h1>Добавить метку для события </h1>
+    <h4>{{ accident.headline }}</h4>
+    <form method="POST" class="post-form">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-default">Добавить метку</button>
+    </form>
+{% endblock %}

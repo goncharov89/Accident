@@ -1,0 +1,10 @@
+{% extends 'accident/base.html' %}
+
+
+{% block content %}
+    <h1>Форма открытия аварии</h1>
+    <form method="POST" class="post-form">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-default">Открыть аварию</button>
+    </form>
+{% endblock %}
