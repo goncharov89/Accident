@@ -8,7 +8,8 @@ from .forms import PostForm, EventForm, LinkForm, PostFormEdit
 def accident_list(request):
     accident = Accident.objects.select_related().order_by('created_date')
     tags = Tag.objects.all()
-    return render(request, 'accident/accident_list.html', {'accident': accident, 'tags': tags})
+    context = {'accident': accident, 'tags': tags}
+    return render(request, 'accident/accident_list.html', context)
 
 
 def accident_detail(request, pk):
@@ -16,7 +17,9 @@ def accident_detail(request, pk):
     events = Events.objects.filter(accident=pk).order_by('date_time')
     tag = Tag.objects.filter(accident=pk)
     last_date = events.aggregate(Max('date_time'))
-    return render(request, 'accident/accident_detail.html', {'events': events, 'tag': tag, 'accident': accident, 'last_date': last_date})
+    context = {'events': events, 'tag': tag,
+               'accident': accident, 'last_date': last_date}
+    return render(request, 'accident/accident_detail.html', context)
 
 
 def accident_new(request):
@@ -29,7 +32,8 @@ def accident_new(request):
             return redirect('accident_detail', pk=accident.id)
     else:
         form = PostForm()
-    return render(request, 'accident/accident_edit.html', {'form': form})
+    context = {'form': form}
+    return render(request, 'accident/accident_edit.html', context)
 
 
 def event_new(request, pk):
@@ -44,7 +48,8 @@ def event_new(request, pk):
             return redirect('accident_detail', pk=accident.pk)
     else:
         form = EventForm()
-    return render(request, 'accident/event_edit.html', {'form': form, 'accident': accident})
+    context = {'form': form, 'accident': accident}
+    return render(request, 'accident/event_edit.html', context)
 
 
 def link_new(request, pk):
@@ -64,7 +69,8 @@ def link_new(request, pk):
             return redirect('accident_detail', pk=accident.pk)
     else:
         form = LinkForm()
-    return render(request, 'accident/link_edit.html', {'form': form, 'accident': accident})
+    context = {'form': form, 'accident': accident}
+    return render(request, 'accident/link_edit.html', context)
 
 
 def accident_edit(request, pk):
@@ -82,4 +88,5 @@ def accident_edit(request, pk):
             return redirect('accident_detail', pk=accident.id)
     else:
         form = PostFormEdit(instance=accident)
-    return render(request, 'accident/accident_edit_form.html', {'form': form})
+    context = {'form': form}
+    return render(request, 'accident/accident_edit_form.html', context)
