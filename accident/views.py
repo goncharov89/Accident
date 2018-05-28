@@ -63,8 +63,9 @@ def link_new(request, pk):
             link.link = form.cleaned_data['link']
             link.save()
             event = Events()
-            event.event = 'Прикреплен тикет ' + form.cleaned_data['tag_text']
+            event.event = None
             event.accident = accident
+            event.tag_link = link
             event.save()
             return redirect('accident_detail', pk=accident.pk)
     else:
