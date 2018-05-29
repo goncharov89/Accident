@@ -1,5 +1,6 @@
 from django import forms
 from .models import Accident
+from django.forms import DateTimeField
 
 
 class PostForm(forms.ModelForm):
@@ -26,6 +27,7 @@ class PostFormEdit(forms.ModelForm):
 
 class EventForm(forms.Form):
     event_text = forms.CharField(label="", widget=forms.Textarea)
+ 
 
 
 class LinkForm(forms.Form):

@@ -1,5 +1,4 @@
 from django.db import models
-
 from django.utils import timezone
 
 
@@ -29,9 +28,6 @@ class Status(models.Model):
     def __str__(self):
         return self.headline
 
-    def comment_line(self):
-        return self.comment
-
 
 class Accident(models.Model):
     author = models.ForeignKey('auth.User', on_delete=models.PROTECT)
@@ -49,17 +45,13 @@ class Accident(models.Model):
     source = models.ForeignKey(
         'Source', on_delete=models.PROTECT, null=True, verbose_name='Источник')
 
-    def update(self):
-        self.update_date = timezone.now()
-        self.save()
-
     def __str__(self):
         return self.headline
 
 
 class Events(models.Model):
     date_time = models.DateTimeField(default=timezone.now)
-    event = models.TextField(verbose_name='Действие')
+    event = models.TextField(verbose_name='Действие', null=True)
     accident = models.ForeignKey('Accident', on_delete=models.CASCADE,verbose_name='')
 
     def __str__(self):
