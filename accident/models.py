@@ -53,7 +53,6 @@ class Events(models.Model):
     date_time = models.DateTimeField(default=timezone.now)
     event = models.TextField(verbose_name='Действие', null=True)
     accident = models.ForeignKey('Accident', on_delete=models.CASCADE,verbose_name='')
-    tag_link = models.ForeignKey('Tag', null=True, blank=True, on_delete=models.PROTECT)
 
     def __str__(self):
         return self.event
@@ -61,7 +60,7 @@ class Events(models.Model):
 
 class Tag(models.Model):
     tag_text = models.TextField()
-    accident = models.ForeignKey('Accident', on_delete=models.CASCADE, null=True)
+    accident = models.ForeignKey('Accident', on_delete=models.CASCADE)
     link = models.TextField(null=True, blank=True)
 
     def __str__(self):

@@ -3,6 +3,7 @@ from .models import Accident, Events, Tag
 from django.shortcuts import redirect
 from django.db.models import Max
 from .forms import PostForm, EventForm, LinkForm, PostFormEdit
+from datetime import datetime
 
 
 def accident_list(request):
@@ -28,6 +29,13 @@ def accident_new(request):
         if form.is_valid():
             accident = form.save(commit=False)
             accident.author = request.user
+            try:
+                request.POST['public']
+                date_time = request.POST['datetime']
+                date_time_obj = datetime.strptime(date_time, "%d.%m.%Y %H:%M")
+                accident.created_date = date_time_obj
+            except:
+                pass
             accident.save()
             return redirect('accident_detail', pk=accident.id)
     else:
@@ -44,6 +52,13 @@ def event_new(request, pk):
             event = Events()
             event.event = form.cleaned_data['event_text']
             event.accident = accident
+            try:
+                request.POST['public']
+                date_time = request.POST['datetime']
+                date_time_obj = datetime.strptime(date_time, "%d.%m.%Y %H:%M")
+                event.date_time = date_time_obj
+            except:
+                pass
             event.save()
             return redirect('accident_detail', pk=accident.pk)
     else:
@@ -63,9 +78,15 @@ def link_new(request, pk):
             link.link = form.cleaned_data['link']
             link.save()
             event = Events()
-            event.event = None
+            event.event = 'Прикреплен тикет ' + form.cleaned_data['tag_text']
             event.accident = accident
-            event.tag_link = link
+            try:
+                request.POST['public']
+                date_time = request.POST['datetime']
+                date_time_obj = datetime.strptime(date_time, "%d.%m.%Y %H:%M")
+                event.date_time = date_time_obj
+            except:
+                pass
             event.save()
             return redirect('accident_detail', pk=accident.pk)
     else:

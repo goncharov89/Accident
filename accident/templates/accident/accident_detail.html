@@ -71,12 +71,7 @@
         	<tr>
         		<td>{{ forloop.counter }}</td>
         		<td>
-                    {% if post.event %}
-        			     {{ post.event }}
-                    {% else %}
-                        Прикреплена метка <a href='{{ post.tag_link.link }}'>{{ post.tag_link }}</a>
-                    {% endif %}
-                    
+        			{{ post.event }}
         		</td>
         		<td>
         			{{ post.date_time|date:"G:i:s" }}
