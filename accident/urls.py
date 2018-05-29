@@ -20,10 +20,10 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url('^$', views.accident_list, name='accident_list'),
-    url(r'^accident_detail/(?P<pk>\d+)/$', views.accident_detail, name='accident_detail'),
-    url(r'^accident/new/$', views.accident_new, name='accident_new'),
-    url(r'^event/new/(?P<pk>\d+)/$', views.event_new, name='event_new'),
-    url(r'^event/link/(?P<pk>\d+)/$', views.link_new, name='link_new'),
-    url(r'^accident/edit/(?P<pk>\d+)/$', views.accident_edit, name='edit'),
+    path('', views.accident_list, name='accident_list'),
+    path('accident_detail/<int:pk>', views.accident_detail, name='accident_detail'),
+    path('accident/new/', views.accident_new, name='accident_new'),
+    path('event/new/<int:pk>', views.event_new, name='event_new'),
+    path('event/link/<int:pk>', views.link_new, name='link_new'),
+    path('accident/edit/<int:pk>', views.accident_edit, name='edit'),
 ]
