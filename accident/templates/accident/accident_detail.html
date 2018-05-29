@@ -1,12 +1,10 @@
 {% extends 'accident/base.html' %}
 
-
 {% block page_title %}
 
     <title>{{ accident.headline }}</title>
 
 {% endblock %}
-
 
 {% block add_link %}
     
@@ -19,7 +17,6 @@
 
 {% block content %}
 
-    
         Источник: {{ accident.source }}<br>
         Автор: {{ accident.author }}<br>
         Система: {{ accident.system }}<br>
@@ -66,11 +63,20 @@
 
         	</tr>
     	</thead>
+        
+            <tr>
+                <td>#</td>
+                <td>Открытие аварии</td>
+                <td>{{ accident.created_date|date:"G:i:s" }}</td>
+                <td>{{ accident.created_date|date:"d.m.Y" }}</td>
+             </tr>
+
         {% for post in events %}
                 
         	<tr>
         		<td>{{ forloop.counter }}</td>
         		<td>
+
         			{{ post.event }}
         		</td>
         		<td>
