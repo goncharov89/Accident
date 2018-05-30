@@ -9,8 +9,6 @@
 {% block add_link %}
 
     <a href="{% url 'accident_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
-      {% load gravatar %}
-    {{ user.name|gravatar:50 }}
 
 {% endblock %}
 
