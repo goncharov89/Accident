@@ -1,8 +1,10 @@
 from django.utils import timezone
 from django.template import Library
 
-
 register = Library()
+
+# return timedelta beetwen two dates
+# TEMPLATE USE:  {{ date1|diff_date:date2 }}
 
 
 def diff_date(value, arg=None):
@@ -16,6 +18,7 @@ def diff_date(value, arg=None):
     on_delay = time_end - time_begin
 
     return on_delay
-#Сделать вывод строки в красивом виде
 
+
+# Сделать вывод строки в красивом виде
 register.filter('diff_date', diff_date)
