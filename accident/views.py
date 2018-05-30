@@ -9,8 +9,7 @@ from datetime import datetime
 def accident_list(request):
     accident = Accident.objects.select_related().order_by('created_date')
     tags = Tag.objects.all()
-    user = request.user
-    context = {'accident': accident, 'tags': tags, 'user': user}
+    context = {'accident': accident, 'tags': tags}
     return render(request, 'accident/accident_list.html', context)
 
 
