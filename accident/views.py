@@ -7,7 +7,7 @@ from datetime import datetime
 
 
 def accident_list(request):
-    accident = Accident.objects.select_related().order_by('created_date')
+    accident = Accident.objects.all().order_by('created_date')
     tags = Tag.objects.all()
     context = {'accident': accident, 'tags': tags}
     return render(request, 'accident/accident_list.html', context)
@@ -78,8 +78,9 @@ def link_new(request, pk):
             link.link = form.cleaned_data['link']
             link.save()
             event = Events()
-            event.event = 'Прикреплен тикет ' + form.cleaned_data['tag_text']
             event.accident = accident
+            event.istag = True
+            event.tag = link
             try:
                 request.POST['public']
                 date_time = request.POST['datetime']

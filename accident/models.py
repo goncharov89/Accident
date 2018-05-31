@@ -52,10 +52,13 @@ class Accident(models.Model):
 class Events(models.Model):
     date_time = models.DateTimeField(default=timezone.now)
     event = models.TextField(verbose_name='Действие', null=True)
-    accident = models.ForeignKey('Accident', on_delete=models.CASCADE,verbose_name='')
+    accident = models.ForeignKey(
+        'Accident', on_delete=models.CASCADE, verbose_name='')
     isstatus_change = models.BooleanField(default=False)
-    status = models.ForeignKey('StatusHist', on_delete=models.PROTECT, null=True)
-
+    status = models.ForeignKey(
+        'StatusHist', on_delete=models.PROTECT, null=True)
+    istag = models.BooleanField(default=False)
+    tag = models.ForeignKey('Tag', on_delete=models.PROTECT, null=True)
 
     def __str__(self):
         return self.event
