@@ -76,15 +76,29 @@
         	<tr>
         		<td>{{ forloop.counter }}</td>
         		<td>
-                    {% if post.isstatus_change %}
+                    {% if post.isstatus_change is False %}
 
-                        Присвоен статус "{{ post.status.status }}"
+
+                        {% if post.istag  is False %}
+
+
+                             {{ post.event }}
+
+                        {% else %}
+
+                            Добавлена метка <a href = "{{ post.tag.link }}">{{ post.tag.tag_text }}</a>
+
+                        {% endif %}
 
                     {% else %}
 
-                        {{ post.event }}
+                        Присвоен статус "{{ post.status.status }}"
 
                     {% endif %}
+
+
+
+  
 
         		</td>
         		<td>

@@ -5,6 +5,7 @@ register = Library()
 
 # return timedelta beetwen two dates
 # TEMPLATE USE:  {{ date1|diff_date:date2 }}
+# OR {{ accident.created_date|diff_date }} default date2 is now.
 
 
 def diff_date(value, arg=None):
