@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Accident, Events, Tag
+from .models import Accident, Events, Tag, StatusHist
 from django.shortcuts import redirect
 from django.db.models import Max
 from .forms import PostForm, EventForm, LinkForm, PostFormEdit
@@ -103,10 +103,15 @@ def accident_edit(request, pk):
         if form.is_valid():
             accident = form.save()
             new_status = str(form.cleaned_data['status'])
-            event = Events()
-            event.event = old_status + '->' + new_status
-            event.accident = accident
-            event.save()
+            if (old_status != new_status):
+                status_hist = StatusHist()
+                status_hist.status = form.cleaned_data['status']
+                status_hist.save()
+                event = Events()
+                event.accident = accident
+                event.isstatus_change = True
+                event.status = status_hist
+                event.save()
             return redirect('accident_detail', pk=accident.id)
     else:
         form = PostFormEdit(instance=accident)

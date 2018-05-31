@@ -76,8 +76,16 @@
         	<tr>
         		<td>{{ forloop.counter }}</td>
         		<td>
+                    {% if post.isstatus_change %}
 
-        			{{ post.event }}
+                        Присвоен статус "{{ post.status.status }}"
+
+                    {% else %}
+
+                        {{ post.event }}
+
+                    {% endif %}
+
         		</td>
         		<td>
         			{{ post.date_time|date:"G:i:s" }}
