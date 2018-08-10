@@ -10,7 +10,7 @@
 
 {% block link %}
 
-<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+        <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
         <link href="{% static 'air-datepicker-master/dist/css/datepicker.min.css' %}" rel="stylesheet" type="text/css">
         <script src="{% static 'air-datepicker-master/dist/js/datepicker.min.js' %}"></script>
 
@@ -31,18 +31,78 @@
 
 {% endblock %}
 
-{% block content %}
-    <h1>Форма открытия аварии</h1>
-    <form method="POST" class="post-form">{% csrf_token %}
-        {{ form.as_p }}
-        
-        <label><input type="checkbox" name="public" id="public">Указать дату и время </label>
 
-		<div id="hide" style="display:none;">
-			<p>
-   			 	<input type='text' class="datepicker-here" data-timepicker="true" data-position="right top" value="{% now "d.m.Y H:i" %}" name = "datetime"  id="name"/>
-   			 </p>
-		</div>
-        <button type="submit" class="save btn btn-default">Открыть аварию</button>
+{% block content %}
+
+   {% if user.is_authenticated %}
+
+
+        <h1>Форма открытия аварии</h1>
+
+        <form method="POST">{% csrf_token %}
+            <div class="form-group">
+              
+            </div>
+            
+            
+        </form>
+
+
+    <form method="POST" class="post-form">{% csrf_token %}
+
+     <div class="form-group">
+      <label for="headline">Заголовок</label>
+      {{ form.headline }}
+
+     </div>
+
+     <div class="form-group">
+      <label for="id_text">Описание аварии</label>
+       {{ form.text }}
+      <small id="textlHelp" class="form-text text-muted">Опишите аварию и ее влияние</small>
+     </div>
+
+     <div class="form-group">
+      <label for="source">Источник:</label>
+      <select class="form-control" id="source" name="source">
+        <option value="" selected>---------</option>
+        {% for post in source %}
+           <option value="{{ post.id }}">{{ post.headline }}</option>
+           {{ post.headline }}
+        {% endfor %}
+      </select>
+     </div>
+
+     <div class="form-group">
+      <label for="system">Система:</label>
+      <select class="form-control" id="system" name="system_id">
+        <option value="" selected>---------</option>
+        {% for post in system %}
+           <option value="{{ post.id }}">{{ post.name }}</option>
+        {% endfor %}
+      </select>
+     </div>
+
+     <div class="checkbox">
+      <label><input type="checkbox" name="public" id="public">Указать дату и время </label>
+        <div id="hide" style="display:none;">
+          <p>
+            <input type='text' class="datepicker-here" data-timepicker="true" data-position="right top" value="{% now "d.m.Y H:i" %}" name = "datetime"  id="name"/>
+          </p>
+        </div>
+     </div>
+
+     <button type="submit" class="btn btn-success">Открыть аварию</button>
+
     </form>
+
+  {% else %}
+    <div class="alert alert-warning" role="alert">
+      У неавторизованных пользователей нет прав на открытие аварии
+    </div>
+
+  {% endif %} 
+
+
+
 {% endblock %}

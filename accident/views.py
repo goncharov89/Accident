@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Accident, Events, Tag, StatusHist
+from .models import Accident, Events, Tag, StatusHist, Source, System
 from django.shortcuts import redirect
 from django.db.models import Max
 from .forms import PostForm, EventForm, LinkForm, PostFormEdit
@@ -27,7 +27,11 @@ def accident_new(request):
     if request.method == "POST":
         form = PostForm(request.POST)
         if form.is_valid():
-            accident = form.save(commit=False)
+            accident = Accident()
+            accident.headline = form.cleaned_data['headline']
+            accident.text = form.cleaned_data['text']
+            accident.system = get_object_or_404(System, id=request.POST['system_id'])
+            accident.source = get_object_or_404(Source, id=request.POST['source'])
             accident.author = request.user
             try:
                 request.POST['public']
@@ -40,7 +44,9 @@ def accident_new(request):
             return redirect('accident_detail', pk=accident.id)
     else:
         form = PostForm()
-    context = {'form': form}
+    source = Source.objects.all()
+    system = System.objects.all()
+    context = {'form': form, 'source': source, 'system': system}
     return render(request, 'accident/accident_edit.html', context)
 
 

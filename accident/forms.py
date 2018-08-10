@@ -1,19 +1,12 @@
 from django import forms
 from .models import Accident
-from django.forms import DateTimeField
 
 
-class PostForm(forms.ModelForm):
-
-    class Meta:
-        model = Accident
-        fields = ('headline', 'text', 'source', 'system')
-
-        help_texts = {
-            'headline': 'Краткое описание аварии',
-            'text': 'Опишите аварию и ее влияние',
-
-        }
+class PostForm(forms.Form):
+    headline = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'id': 'headline', 'placeholder': 'Краткое описание аварии', 'name': 'headline'}))
+    text = forms.CharField(widget=forms.Textarea(attrs={
+                           'class': 'form-control rounded-0', 'id': 'id_text', 'rows': '3', 'name': 'id_text'}))
 
 
 class PostFormEdit(forms.ModelForm):
@@ -27,7 +20,6 @@ class PostFormEdit(forms.ModelForm):
 
 class EventForm(forms.Form):
     event_text = forms.CharField(label="", widget=forms.Textarea)
- 
 
 
 class LinkForm(forms.Form):
