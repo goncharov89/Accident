@@ -32,17 +32,58 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Добавить метку для события </h1>
+    <h3>Добавить метку для события </h3>
     <h4>{{ accident.headline }}</h4>
-    <form method="POST" class="post-form">{% csrf_token %}
-        {{ form.as_p }}
-        <label><input type="checkbox" name="public" id="public">Указать дату и время </label>
 
-		<div id="hide" style="display:none;">
-			<p>
-   			 	<input type='text' class="datepicker-here" data-timepicker="true" data-position="right top" value="{% now "d.m.Y H:i" %}" name = "datetime"  id="name"/>
-   			 </p>
-		</div>
-        <button type="submit" class="save btn btn-default">Добавить метку</button>
+    <form method="POST" class="post-form">{% csrf_token %}
+
+      <div class="form-group">
+        <label for="id_text">Метка</label>
+        {{ form.tag_text }}
+        <small id="textlHelp" class="form-text text-muted">Текстовое описание метки</small>
+      </div>
+
+      <div class="form-group">
+        <label for="id_text">Ссылка</label>
+        {{ form.link }}
+        <small id="textlHelp" class="form-text text-muted">Текстовое описание метки</small>
+      </div>
+
+        <div class="checkbox">
+      <label><input type="checkbox" name="public" id="public">Указать дату и время </label>
+        <div id="hide" style="display:none;">
+          <p>
+            <input type='text' class="datepicker-here" data-timepicker="true" data-position="right top" value="{% now "d.m.Y H:i" %}" name = "datetime"  id="name"/>
+          </p>
+        </div>
+     </div>
+
+     <button type="submit" class="btn btn-success">Добавить метку</button>
+
     </form>
+<!-- Кнопка пуска модальное окно -->  
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+  Launch demo modal
+</button>
+
+<!-- Модальное окно -->  
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

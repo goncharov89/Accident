@@ -7,7 +7,7 @@ from datetime import datetime
 
 
 def accident_list(request):
-    accident = Accident.objects.all().order_by('created_date')
+    accident = Accident.objects.all().order_by('-created_date')
     tags = Tag.objects.all()
     context = {'accident': accident, 'tags': tags}
     return render(request, 'accident/accident_list.html', context)
@@ -30,23 +30,19 @@ def accident_new(request):
             accident = Accident()
             accident.headline = form.cleaned_data['headline']
             accident.text = form.cleaned_data['text']
-            accident.system = get_object_or_404(System, id=request.POST['system_id'])
-            accident.source = get_object_or_404(Source, id=request.POST['source'])
+            accident.system = get_object_or_404(System, pk=form.cleaned_data['system_id'])
+            accident.source = get_object_or_404(Source, pk=form.cleaned_data['source'])
             accident.author = request.user
-            try:
+            if 'public' in request.POST:
                 request.POST['public']
                 date_time = request.POST['datetime']
                 date_time_obj = datetime.strptime(date_time, "%d.%m.%Y %H:%M")
                 accident.created_date = date_time_obj
-            except:
-                pass
             accident.save()
             return redirect('accident_detail', pk=accident.id)
     else:
         form = PostForm()
-    source = Source.objects.all()
-    system = System.objects.all()
-    context = {'form': form, 'source': source, 'system': system}
+    context = {'form': form}
     return render(request, 'accident/accident_edit.html', context)
 
 
