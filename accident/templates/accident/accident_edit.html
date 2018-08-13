@@ -67,6 +67,25 @@
         {{ form.source }}
      </div>
 
+     <script type="text/javascript">
+        $("#source").change(function(){
+            switch($('#source').val()) {
+                case "1": $('#hide_link').fadeIn().show(); break;
+                default: $('#hide_link').fadeOut(300); break;
+            }
+        });
+
+    </script>
+
+        <div id="hide_link" style="display:none;" class="form-group">
+            <label for="link">Ссылка на BPM</label>
+            {{ form.link }}
+
+            <label for="link">SR Номер</label>
+            {{ form.link_text }}
+          
+        </div>
+
      <div class="form-group">
       <label for="system">Система:</label>
         {{ form.system_id }}

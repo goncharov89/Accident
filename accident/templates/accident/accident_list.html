@@ -15,10 +15,13 @@
         $(document).ready(function() {
             $('#accident_list').DataTable({
                 "stateSave": true,
-                "processing": true
+                "processing": true,
+                "pageLength": 25,
+                "ordering": false
             });
         } );
     </script>
+
 {% endblock %}
 
     {% block add_link %}
@@ -30,7 +33,7 @@
 <table id="accident_list" class="table table-striped table-bordered" style="width:100%">
 	<thead>
 		<tr>
-			<th >
+			<th class="nosort">
 				Номер
 			</th>
 
@@ -69,7 +72,7 @@
     			<a href="{% url 'accident_detail' pk=post.pk %}">{{ post.headline }}</a>
     		</td>
     		<td>
-    			{{ post.created_date|date:"d M Y, G:i" }}
+    			{{ post.created_date|date:"j M Y, G:i" }}
     		</td>
     		<td>
     			{{ post.author }}

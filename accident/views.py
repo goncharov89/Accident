@@ -39,6 +39,18 @@ def accident_new(request):
                 date_time_obj = datetime.strptime(date_time, "%d.%m.%Y %H:%M")
                 accident.created_date = date_time_obj
             accident.save()
+            if 'link' in request.POST and 'link_text' in request.POST:
+                accident = get_object_or_404(Accident, id=accident.id)
+                link = Tag()
+                link.tag_text = form.cleaned_data['link_text']
+                link.accident = accident
+                link.link = form.cleaned_data['link']
+                link.save()
+                event = Events()
+                event.accident = accident
+                event.istag = True
+                event.tag = link
+                event.save()
             return redirect('accident_detail', pk=accident.id)
     else:
         form = PostForm()

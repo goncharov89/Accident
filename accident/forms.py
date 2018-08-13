@@ -7,6 +7,10 @@ class PostForm(forms.Form):
         attrs={'class': 'form-control', 'id': 'headline', 'placeholder': 'Краткое описание аварии', 'name': 'headline'}))
     text = forms.CharField(widget=forms.Textarea(attrs={
                            'class': 'form-control rounded-0', 'id': 'id_text', 'rows': '3', 'name': 'id_text'}))
+    link = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'id': 'headline', 'placeholder': 'https://'}))
+    link_text = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'id': 'headline', 'placeholder': 'SRXXXXX'}))
 
     system = System.objects.all()
     source = Source.objects.all()
