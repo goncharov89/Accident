@@ -30,8 +30,10 @@ def accident_new(request):
             accident = Accident()
             accident.headline = form.cleaned_data['headline']
             accident.text = form.cleaned_data['text']
-            accident.system = get_object_or_404(System, pk=form.cleaned_data['system_id'])
-            accident.source = get_object_or_404(Source, pk=form.cleaned_data['source'])
+            accident.system = get_object_or_404(
+                System, pk=form.cleaned_data['system_id'])
+            accident.source = get_object_or_404(
+                Source, pk=form.cleaned_data['source'])
             accident.author = request.user
             if 'public' in request.POST:
                 request.POST['public']
@@ -66,13 +68,20 @@ def event_new(request, pk):
             event = Events()
             event.event = form.cleaned_data['event_text']
             event.accident = accident
-            try:
-                request.POST['public']
+
+            if 'public' in request.POST:
                 date_time = request.POST['datetime']
                 date_time_obj = datetime.strptime(date_time, "%d.%m.%Y %H:%M")
                 event.date_time = date_time_obj
-            except:
-                pass
+
+            if 'link' in request.POST and 'link_text' in request.POST:
+                link = Tag()
+                link.tag_text = form.cleaned_data['link_text']
+                link.accident = accident
+                link.link = form.cleaned_data['link']
+                link.save()
+                event.istag = True
+                event.tag = link
             event.save()
             return redirect('accident_detail', pk=accident.pk)
     else:
@@ -95,13 +104,10 @@ def link_new(request, pk):
             event.accident = accident
             event.istag = True
             event.tag = link
-            try:
-                request.POST['public']
+            if 'public' in request.POST:
                 date_time = request.POST['datetime']
                 date_time_obj = datetime.strptime(date_time, "%d.%m.%Y %H:%M")
                 event.date_time = date_time_obj
-            except:
-                pass
             event.save()
             return redirect('accident_detail', pk=accident.pk)
     else:

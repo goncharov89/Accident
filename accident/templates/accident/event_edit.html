@@ -28,6 +28,24 @@
             })
         </script>
 
+        <script type="text/javascript">
+            $(document).ready(function(){
+             $("input#add_tag").change(function(){
+
+              if ($(this).attr("checked")) {
+                  $('#hide_link').fadeIn().show();
+                  document.getElementById("link").required = true;
+                  document.getElementById("link_headline").required = true;
+              } else {
+                  $('#hide_link').fadeOut(300); 
+                  document.getElementById("link").required = false;
+                  document.getElementById("link_headline").required = false;
+              }
+
+             });
+            })
+        </script>
+
 {% endblock %}
 
 
@@ -39,7 +57,18 @@
       <div class="form-group">
         <label for="id_text">Событие</label>
           {{ form.event_text }}
-          <small id="textlHelp" class="form-text text-muted">Опишите аварию и ее влияние</small>
+          <small id="textlHelp" class="form-text text-muted">Опишите событие, например: "Открыт тикет вендору"</small>
+      </div>
+
+     
+        <label><input type="checkbox" name="add_tag" id="add_tag">Добавить метку </label>
+        <div id="hide_link" style="display:none;" class="form-group">
+            <label for="link">Ссылка на BPM</label>
+            {{ form.link }}
+
+            <label for="link">SR Номер</label>
+            {{ form.link_text }}
+    
       </div>
 
       <div class="checkbox">

@@ -70,8 +70,16 @@
      <script type="text/javascript">
         $("#source").change(function(){
             switch($('#source').val()) {
-                case "1": $('#hide_link').fadeIn().show(); break;
-                default: $('#hide_link').fadeOut(300); break;
+                case "1": 
+                  $('#hide_link').fadeIn().show();
+                  document.getElementById("link").required = true;
+                  document.getElementById("link_headline").required = true; 
+                break;
+                default: 
+                  $('#hide_link').fadeOut(300); 
+                  document.getElementById("link").required = false;
+                  document.getElementById("link_headline").required = false;
+                break;
             }
         });
 

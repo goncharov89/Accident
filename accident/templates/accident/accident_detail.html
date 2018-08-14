@@ -180,7 +180,15 @@
 
                         {% else %}
 
+                            {% if post.event == None %}
+
                             Добавлена метка <a href = "{{ post.tag.link }}">{{ post.tag.tag_text }}</a>
+
+                            {% else %}
+
+                                {{ post.event }} <a href = "{{ post.tag.link }}">{{ post.tag.tag_text }}</a>
+
+                            {% endif %}
 
                         {% endif %}
 
