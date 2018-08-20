@@ -36,17 +36,10 @@
 
 {% endblock %}
 
-{% block add_link %}
-    
-    <a href="{% url 'edit' pk=accident.id %}" class="top-menu"><span class="glyphicon glyphicon-pencil"></span></a>
-    <a href="{% url 'link_new' pk=accident.id %}" class="top-menu"><span class="glyphicon glyphicon-link"></span></a>
-    <a href="{% url 'event_new' pk=accident.id %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
-
-{% endblock %}
 
 {% block content %}
     
-     <h3>   
+    <h3>   
         Заголовок: <strong>{{ accident.headline }}</strong>
     </h3>
     
@@ -59,7 +52,8 @@
     <table class="table table-striped table-bordered">
         <tr>
             <td>Источник:</td> 
-            <td>{{ accident.source }}
+            <td>
+                {{ accident.source }}
                  {% for post in tag %}
                     {% if post.is_opened is True %}
                         (<a href = '{{ post.link }}' target="_blank">{{ post.tag_text}}</a>)
@@ -109,28 +103,65 @@
             <td>Метки:</td> 
             <td>
                 {% for post in tag %}
-                    <a href = '{{ post.link }}' target="_blank">{{ post.tag_text}}</a>
+                    <p><a href = '{{ post.link }}' target="_blank">{{ post.tag_text}}</a></p>
                 {% endfor %}
             </td>
         </tr>
 
          <tr>
-            <td><strong>Влияние:</strong></td> 
+            <td><strong>Описание аварии:</strong></td> 
             <td>{{ accident.text }}</td>
         </tr>
 
+        {% if  accident.causes is not None %}
+            {% if accident.causes != '' %}
+
+        <tr>
+            <td><strong>Причины:</strong></td> 
+            <td>{{ accident.causes }}</td>
+        </tr>
+
+            {% endif %}
+        {% endif %}
+
+
+        {% if  accident.action is not None %}
+            {% if accident.action != '' %}
+
+        <tr>
+            <td><strong>Предпринятые действия:</strong></td> 
+            <td>{{ accident.action }}</td>
+        </tr>
+        
+            {% endif %}
+        {% endif %}
 
     </table>
     </div>
     
     <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
             <ul class="nav navbar-nav">
+
                 <li class="nav-item active">
                   <a class="nav-link" href="{% url 'event_new' pk=accident.id %}">Add Event <span class="sr-only">(current)</span></a>
                 </li>
+
                 <li class="nav-item active">
                   <a class="nav-link" href="{% url 'link_new' pk=accident.id %}">Add Tag <span class="sr-only">(current)</span></a>
                 </li>
+
+                <li class="nav-item active">
+                  <a class="nav-link" href="{% url 'edit' pk=accident.id %}">Edit<span class="sr-only">(current)</span></a>
+                </li>
+
+                <li class="nav-item active">
+                  <a class="nav-link" href="{% url 'pdf' pk=accident.id %}" target="_blank">Create PDF<span class="sr-only">(current)</span></a>
+                </li>
+
+                 <li class="nav-item active">
+                  <a class="nav-link" href="{% url 'nopdf' pk=accident.id %}" target="_blank">Create HTML<span class="sr-only">(current)</span></a>
+                </li>
+
             </ul>
 
     </nav>

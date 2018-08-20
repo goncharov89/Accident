@@ -15,8 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.conf.urls import url
 from . import views
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,4 +26,6 @@ urlpatterns = [
     path('event/new/<int:pk>', views.event_new, name='event_new'),
     path('event/link/<int:pk>', views.link_new, name='link_new'),
     path('accident/edit/<int:pk>', views.accident_edit, name='edit'),
+    path('accident/pdf/<int:pk>', views.HelloPDFView.as_view(), name='pdf'),
+    path('accident/nopdf/<int:pk>', views.nopdf, name='nopdf'),
 ]

@@ -54,21 +54,21 @@
     <h4>{{ accident.headline }}</h4>
 
     <form method="POST" class="post-form">{% csrf_token %}
+
       <div class="form-group">
         <label for="id_text">Событие</label>
           {{ form.event_text }}
           <small id="textlHelp" class="form-text text-muted">Опишите событие, например: "Открыт тикет вендору"</small>
       </div>
 
-     
+      <div class="checkbox">
         <label><input type="checkbox" name="add_tag" id="add_tag">Добавить метку </label>
-        <div id="hide_link" style="display:none;" class="form-group">
-            <label for="link">Ссылка на BPM</label>
-            {{ form.link }}
-
-            <label for="link">SR Номер</label>
-            {{ form.link_text }}
-    
+      </div>
+      <div id="hide_link" style="display:none;" class="form-group">
+        <label for="link">Ссылка на BPM</label>
+          {{ form.link }}
+        <label for="link">SR Номер</label>
+          {{ form.link_text }}
       </div>
 
       <div class="checkbox">

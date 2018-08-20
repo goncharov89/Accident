@@ -1,0 +1,127 @@
+{% load staticfiles %}
+{% load static from staticfiles %}
+{% block extra_style %}
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <style type="text/css">
+    table {
+    border-collapse: collapse; /* Убираем двойные линии между ячейками */
+   }
+   td, th {
+    padding: 3px; /* Поля вокруг содержимого таблицы */
+    border: 1px solid black; /* Параметры рамки */
+   }
+
+  
+    @font-face { font-family: "OpenSans"; src: url({% static 'fonts/OpenSans/2211.ttf' %}); }
+   
+        body {
+            font-family: "OpenSans";
+            color: #333333;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div id="content">
+        <div class="main">
+            <h1>Отчет о нештатной ситуации</h1>
+        </div>
+    </div>
+
+    <table border="1">
+        <th colspan="2" align = "right" style ='background-color: #C0C0C0;'>
+             {% load accident_extras %}
+            "{{ accident.headline }}"  длительность: {{ accident.created_date|diff_date:last_date.date_time__max }}
+        </th>
+        <tr >
+            <td colspan = "2">{{ accident.text }}</td>
+        </tr>
+        <tr >
+            <td colspan = "2" align = "center" style ='background-color: #C0C0C0;'>Chronology of events</td>
+        </tr>
+         <tr >
+            <td colspan = "2" align = "left">
+                Фиксация {{ accident.created_date|date:"G:i:s" }} {{ accident.created_date|date:"d.m.Y" }}<br>
+                {% for post in events %}
+        
+                
+                    {{ forloop.counter }} )
+                    
+                        {% if post.isstatus_change is False %}
+
+                            {% if post.istag  is False %}
+
+
+                                 {{ post.event }}
+
+                            {% else %}
+
+                                {% if post.event == None %}
+
+                                Добавлена метка <a href = "{{ post.tag.link }}">{{ post.tag.tag_text }}</a>
+
+                                {% else %}
+
+                                    {{ post.event }} <a href = "{{ post.tag.link }}">{{ post.tag.tag_text }}</a>
+
+                                {% endif %}
+
+                            {% endif %}
+
+                        {% else %}
+
+                            Присвоен статус "{{ post.status.status }}"
+
+                        {% endif %}
+
+            
+                        {{ post.date_time|date:"G:i:s" }}
+                    
+                        {{ post.date_time|date:"d.m.Y" }}
+            </br>
+            
+                    {% endfor %}
+
+             </td>
+        </tr>
+        <tr>
+            <td style ='background-color: #C0C0C0;'>Fin effect</td>
+            <td>
+                {% if accident.fin_effect is None %}
+                    None
+                {%else%}
+                    {{ accident.fin_effect }}
+                {% endif %}
+
+            </td>
+        </tr>
+
+        <tr >
+            <td style ='background-color: #C0C0C0;'>Root cause</td>
+            <td style ='background-color: #C0C0C0;'>Actions</td>
+        </tr>
+
+          <tr>
+            <td>
+                {% if accident.causes is None %}
+                    None
+                {%else%}
+                    {{ accident.causes }}
+                {% endif %}
+
+
+            </td>
+
+            <td>
+                {% if accident.action is None %}
+                    None
+                {%else%}
+                    {{ accident.action }}
+                {% endif %}
+            
+            </td>
+        </tr>
+    
+    </table>
+
+{% endblock %}
