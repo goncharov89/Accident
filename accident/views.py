@@ -1,13 +1,49 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Accident, Events, Tag, StatusHist
+from .models import Accident, Events, Tag, StatusHist, Source, System
 from django.shortcuts import redirect
 from django.db.models import Max
 from .forms import PostForm, EventForm, LinkForm, PostFormEdit
 from datetime import datetime
 
+from django.conf import settings
+from easy_pdf.views import PDFTemplateView
+
+
+class HelloPDFView(PDFTemplateView):
+
+    template_name = 'hello.html'
+    download_filename = 'hello.pdf'
+    base_url = 'file://' + settings.STATIC_ROOT + '/'
+
+    def get_context_data(self, pk):
+        accident = get_object_or_404(Accident, pk=pk)
+        events = Events.objects.filter(accident=pk).order_by('date_time')
+        tag = Tag.objects.filter(accident=pk)
+        last_date = events.aggregate(Max('date_time'))
+        return super(HelloPDFView, self).get_context_data(
+            pagesize='A4',
+            title='Hi there!',
+            encoding=u"utf-8",
+            accident=accident,
+            tag=tag,
+            events=events,
+            last_date=last_date
+
+        )
+
+
+def nopdf(request, pk):
+    accident = get_object_or_404(Accident, pk=pk)
+    events = Events.objects.filter(accident=pk).order_by('date_time')
+    tag = Tag.objects.filter(accident=pk)
+    last_date = events.aggregate(Max('date_time'))
+    context = {'accident': accident, 'events': events,
+               'tag': tag, 'last_date': last_date}
+    return render(request, 'hello.html', context)
+
 
 def accident_list(request):
-    accident = Accident.objects.all().order_by('created_date')
+    accident = Accident.objects.all().order_by('-created_date')
     tags = Tag.objects.all()
     context = {'accident': accident, 'tags': tags}
     return render(request, 'accident/accident_list.html', context)
@@ -27,16 +63,32 @@ def accident_new(request):
     if request.method == "POST":
         form = PostForm(request.POST)
         if form.is_valid():
-            accident = form.save(commit=False)
+            accident = Accident()
+            accident.headline = form.cleaned_data['headline']
+            accident.text = form.cleaned_data['text']
+            accident.system = get_object_or_404(
+                System, pk=form.cleaned_data['system_id'])
+            accident.source = get_object_or_404(
+                Source, pk=form.cleaned_data['source'])
             accident.author = request.user
-            try:
+            if 'public' in request.POST:
                 request.POST['public']
                 date_time = request.POST['datetime']
                 date_time_obj = datetime.strptime(date_time, "%d.%m.%Y %H:%M")
                 accident.created_date = date_time_obj
-            except:
-                pass
             accident.save()
+            if request.POST['link'] != '' and request.POST['link_text'] !='':
+                accident = get_object_or_404(Accident, id=accident.id)
+                link = Tag()
+                link.tag_text = form.cleaned_data['link_text']
+                link.accident = accident
+                link.link = form.cleaned_data['link']
+                link.save()
+                event = Events()
+                event.accident = accident
+                event.istag = True
+                event.tag = link
+                event.save()
             return redirect('accident_detail', pk=accident.id)
     else:
         form = PostForm()
@@ -52,13 +104,20 @@ def event_new(request, pk):
             event = Events()
             event.event = form.cleaned_data['event_text']
             event.accident = accident
-            try:
-                request.POST['public']
+
+            if 'public' in request.POST:
                 date_time = request.POST['datetime']
                 date_time_obj = datetime.strptime(date_time, "%d.%m.%Y %H:%M")
                 event.date_time = date_time_obj
-            except:
-                pass
+
+            if request.POST['link'] != '' and request.POST['link_text'] !='':
+                link = Tag()
+                link.tag_text = form.cleaned_data['link_text']
+                link.accident = accident
+                link.link = form.cleaned_data['link']
+                link.save()
+                event.istag = True
+                event.tag = link
             event.save()
             return redirect('accident_detail', pk=accident.pk)
     else:
@@ -81,13 +140,10 @@ def link_new(request, pk):
             event.accident = accident
             event.istag = True
             event.tag = link
-            try:
-                request.POST['public']
+            if 'public' in request.POST:
                 date_time = request.POST['datetime']
                 date_time_obj = datetime.strptime(date_time, "%d.%m.%Y %H:%M")
                 event.date_time = date_time_obj
-            except:
-                pass
             event.save()
             return redirect('accident_detail', pk=accident.pk)
     else:

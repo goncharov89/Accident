@@ -5,14 +5,20 @@
         {% block page_title %}
         {% endblock %}
 
-        
+        <!--
+        <link rel="stylesheet" href="{% static 'bootstrap_tablesorter/css/bootstrap.min.css' %}" />
+        <link rel="stylesheet" href="{% static 'bootstrap_tablesorter/css/dataTables.bootstrap.min.css' %}" />
+        <script type="text/javascript" src="{% static 'bootstrap_tablesorter/js/dataTables.bootstrap.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'bootstrap_tablesorter/js/jquery.dataTables.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'bootstrap_tablesorter/js/jquery-3.3.1.js' %}"></script>
+        -->
 
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-        <link rel="stylesheet" href="{% static 'css/blog.css' %}">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        
+         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css" />
+         <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+         <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+         <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
+         <link rel="stylesheet" href="{% static 'bootstrap_tablesorter/css/style.css' %}" />
 
 
         {% block link %}
@@ -24,23 +30,26 @@
 
     </head>
     <body>
-        <div class="page-header">
-            {% if user.is_authenticated %}
+        
+          {% if user.is_authenticated %}
 
                 {% block add_link %}
                 {% endblock %}
-                
-            {% endif %}
-            <h1><a href="/">Вместо таблицы в экселе</a></h1>
-           
-        </div>
-        <div class="content container">
-            <div class="row">
-                <div class="col-md-8">
-                    {% block content %}
-                    {% endblock %}
-                </div>
+        {% else %}
+            <div class="alert alert-warning" role="alert">
+                Вы неавторизованы <a href="#" class="alert-link">Выйти из тени</a>
             </div>
-        </div>
+          {% endif %}      
+          
+            <h1><a href="/">Реестр нештатных ситуаций</a></h1>
+           
+           
+
+                {% block content %}
+                {% endblock %}
+
+           
+
+       
     </body>
 </html>

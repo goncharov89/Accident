@@ -28,24 +28,57 @@
             })
         </script>
 
+        <script type="text/javascript">
+            $(document).ready(function(){
+             $("input#add_tag").change(function(){
+
+              if ($(this).attr("checked")) {
+                  $('#hide_link').fadeIn().show();
+                  document.getElementById("link").required = true;
+                  document.getElementById("link_headline").required = true;
+              } else {
+                  $('#hide_link').fadeOut(300); 
+                  document.getElementById("link").required = false;
+                  document.getElementById("link_headline").required = false;
+              }
+
+             });
+            })
+        </script>
+
 {% endblock %}
 
 
 {% block content %}
-    <h1>Добавить событие аварии</h1>
+    <h3>Добавить событие</h3>
     <h4>{{ accident.headline }}</h4>
+
     <form method="POST" class="post-form">{% csrf_token %}
 
-        {{ form.as_p }}
+      <div class="form-group">
+        <label for="id_text">Событие</label>
+          {{ form.event_text }}
+          <small id="textlHelp" class="form-text text-muted">Опишите событие, например: "Открыт тикет вендору"</small>
+      </div>
 
-        <label><input type="checkbox" name="public" id="public">Указать дату и время</label>
+      <div class="checkbox">
+        <label><input type="checkbox" name="add_tag" id="add_tag">Добавить метку </label>
+      </div>
+      <div id="hide_link" style="display:none;" class="form-group">
+        <label for="link">Ссылка на BPM</label>
+          {{ form.link }}
+        <label for="link">SR Номер</label>
+          {{ form.link_text }}
+      </div>
 
-		<div id="hide" style="display:none;">
-			<p>
-   			 	<input type='text' class="datepicker-here" data-timepicker="true" data-position="right top" value="{% now "d.m.Y H:i" %}" name = "datetime"  id="name"/>
-   			 </p>
-		</div>
-        
-        <button type="submit" class="save btn btn-default">Добавить событие</button>
+      <div class="checkbox">
+        <label><input type="checkbox" name="public" id="public">Указать дату и время </label>
+          <div id="hide" style="display:none;">
+            <p>
+              <input type='text' class="datepicker-here" data-timepicker="true" data-position="right top" value="{% now "d.m.Y H:i" %}" name = "datetime"  id="name"/>
+            </p>
+          </div>
+      </div>
+      <button type="submit" class="btn btn-success">Добавить событие</button>
     </form>
 {% endblock %}

@@ -40,10 +40,13 @@ class Accident(models.Model):
     tag_var = models.TextField(blank=True)
     status = models.ForeignKey(
         'Status', on_delete=models.PROTECT, verbose_name='Статус', default=1)
-    causes = models.TextField(null=True, blank=True, verbose_name='Влияние')
-    step = models.TextField(null=True, blank=True)
+    causes = models.TextField(null=True, blank=True, verbose_name='Причины')
     source = models.ForeignKey(
         'Source', on_delete=models.PROTECT, null=True, verbose_name='Источник')
+    action = models.TextField(
+        null=True, blank=True, verbose_name='Предпринятые действия по предупреждению/ликвидации')
+    fin_effect = models.TextField(
+        null=True, blank=True, verbose_name='Влияние на абонентов/сервис')
 
     def __str__(self):
         return self.headline
@@ -68,6 +71,7 @@ class Tag(models.Model):
     tag_text = models.TextField()
     accident = models.ForeignKey('Accident', on_delete=models.CASCADE)
     link = models.TextField(null=True, blank=True)
+    is_opened = models.BooleanField(default=False)
 
     def __str__(self):
         return self.tag_text
