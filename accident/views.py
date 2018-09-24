@@ -2,11 +2,46 @@ from django.shortcuts import render, get_object_or_404
 from .models import Accident, Events, Tag, StatusHist, Source, System
 from django.shortcuts import redirect
 from django.db.models import Max
-from .forms import PostForm, EventForm, LinkForm, PostFormEdit
+from .forms import PostForm, EventForm, LinkForm, PostFormEdit, NameForm
 from datetime import datetime
 
 from django.conf import settings
 from easy_pdf.views import PDFTemplateView
+from django.contrib import auth
+from django.http import HttpResponseRedirect
+
+
+def login(request, template_name='accident/auth.html'):
+    if request.user.is_authenticated:
+        return HttpResponseRedirect("/")
+    else:
+        if request.method == 'POST':
+            form = NameForm(request.POST)
+            if form.is_valid():
+                user_name = request.POST['username']
+                passwd = request.POST['password']
+                user = auth.authenticate(username=user_name, password=passwd)
+                if user is not None and user.is_active:
+                    # Правильный пароль и пользователь "активен"
+                    auth.login(request, user)
+                    # Перенаправление на "правильную" страницу
+                    return HttpResponseRedirect("/")
+                else:
+                    # Отображение страницы с ошибкой
+                    message = 'Не верно введен логин или пароль или такого пользователя не существует'
+                    form = NameForm()
+                    context = {'form': form, 'message': message}
+                    #return render(request, 'accident/auth.html', context)
+        else:
+            form = NameForm()
+            context = {'form': form}
+        return render(request, 'accident/auth.html', context)
+
+
+def logout(request):
+    auth.logout(request)
+    # Перенаправление на страницу.
+    return HttpResponseRedirect("/")
 
 
 class HelloPDFView(PDFTemplateView):

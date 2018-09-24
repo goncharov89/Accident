@@ -25,7 +25,24 @@
 {% endblock %}
 
     {% block add_link %}
-        <a href="{% url 'accident_new' %}"class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
+
+        <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+            <ul class="nav navbar-nav">
+
+                <li class="nav-item active">
+                  <a class="nav-link" href="{% url 'accident_new' %}">Create new <span class="sr-only">(current)</span></a>
+                </li>
+
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'logout' %}">LogOut <span class="sr-only">(current)</span></a>
+                </li>
+
+
+            </ul>
+
+    </nav>
+
+
     {% endblock %}
 
 {% block content %}
@@ -74,7 +91,8 @@
     			{{ post.created_date|date:"j M Y, G:i" }}
     		</td>
     		<td>
-    			{{ post.author }}
+                {{ post.author.last_name }} {{ post.author.first_name }}
+
     		</td>
             <td>
                 {{ post.status}}

@@ -24,32 +24,26 @@
         {% block link %}
         {% endblock %}
 
-        
-
-
-
     </head>
     <body>
-        
-          {% if user.is_authenticated %}
+                        
+      <h1><a href="/">Реестр нештатных ситуаций</a></h1>
 
-                {% block add_link %}
-                {% endblock %}
-        {% else %}
-            <div class="alert alert-warning" role="alert">
-                Вы неавторизованы <a href="#" class="alert-link">Выйти из тени</a>
-            </div>
-          {% endif %}      
-          
-            <h1><a href="/">Реестр нештатных ситуаций</a></h1>
-           
-           
+      {% if user.is_authenticated %}
 
-                {% block content %}
-                {% endblock %}
+        {% block add_link %}
+        {% endblock %}
 
-           
+      {% else %}
 
-       
+        <div class="alert alert-warning" role="alert">
+            Вы неавторизованы <a href="login" class="alert-link">Выйти из тени</a>
+        </div>
+
+      {% endif %}  
+
+        {% block content %}
+        {% endblock %}
+
     </body>
 </html>
