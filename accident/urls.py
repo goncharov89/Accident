@@ -28,4 +28,6 @@ urlpatterns = [
     path('accident/edit/<int:pk>', views.accident_edit, name='edit'),
     path('accident/pdf/<int:pk>', views.HelloPDFView.as_view(), name='pdf'),
     path('accident/nopdf/<int:pk>', views.nopdf, name='nopdf'),
+    path('login/', views.login, name='login'),
+    path('logout/', views.logout, name='logout'),
 ]

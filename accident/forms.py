@@ -157,3 +157,21 @@ class LinkForm(forms.Form):
             'id': 'headline',
             'placeholder': 'https://',
             'name': 'headline'}))
+
+
+class NameForm(forms.Form):
+
+    username = forms.CharField(widget=forms.TextInput(
+        attrs={
+            'class': 'form-control',
+            'id': 'login',
+            'placeholder': 'Логин',
+            'name': 'username'}))
+
+    password = forms.CharField(widget=forms.TextInput(
+        attrs={
+            'type': 'password',
+            'class': 'form-control',
+            'id': 'password',
+            'placeholder': 'Пароль',
+            'name': 'username'}))
