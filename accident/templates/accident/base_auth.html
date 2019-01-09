@@ -1,0 +1,43 @@
+{% load staticfiles %}
+
+<html>
+    <head>
+        {% block page_title %}
+        {% endblock %}
+
+        <!--
+        <link rel="stylesheet" href="{% static 'bootstrap_tablesorter/css/bootstrap.min.css' %}" />
+        <link rel="stylesheet" href="{% static 'bootstrap_tablesorter/css/dataTables.bootstrap.min.css' %}" />
+        <script type="text/javascript" src="{% static 'bootstrap_tablesorter/js/dataTables.bootstrap.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'bootstrap_tablesorter/js/jquery.dataTables.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'bootstrap_tablesorter/js/jquery-3.3.1.js' %}"></script>
+        -->
+
+         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css" />
+         <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+         <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+         <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
+         <link rel="stylesheet" href="{% static 'bootstrap_tablesorter/css/style.css' %}" />
+
+
+        {% block link %}
+        {% endblock %}
+
+        
+
+
+
+    </head>
+    <body>
+        
+            <h1><a href="/">Авторизация</a></h1>
+
+                {% block content %}
+                {% endblock %}
+
+           
+
+       
+    </body>
+</html>

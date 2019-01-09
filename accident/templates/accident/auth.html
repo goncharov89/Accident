@@ -1,0 +1,36 @@
+{% extends 'accident/base_auth.html' %}
+
+{% block content %}
+
+
+    <form method="POST" class="form-horizontal">{% csrf_token %}
+
+      <div class="form-group">
+        <div class="col-xs-2">
+          <label for="system">Логин</label>
+            {{ form.username }}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div  class="col-xs-2">
+          <label for="system">Пароль</label>
+            {{ form.password }}
+        </div>
+      </div>
+
+    {% if message is not None %}
+      <div class="alert alert-danger" role="alert">
+        {{ message }}
+      </div>
+    {% endif %}
+
+    <div class="form-group">
+      <div class="col-sm-offset-0 col-sm-4">
+        <button type="submit" class="btn btn-success">login</button>
+      </div>
+    </div>
+
+  </form>
+
+{% endblock %}
