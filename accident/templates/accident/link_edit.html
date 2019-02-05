@@ -32,6 +32,10 @@
 {% endblock %}
 
 {% block content %}
+
+    {% if user.is_authenticated %}
+
+
     <h3>Добавить метку для события </h3>
     <h4>{{ accident.headline }}</h4>
 
@@ -61,6 +65,14 @@
      <button type="submit" class="btn btn-success">Добавить метку</button>
 
     </form>
+
+    {% else %}
+
+    <div class="alert alert-warning" role="alert">
+      У неавторизованных пользователей нет прав на добавление тега
+    </div>
+
+  {% endif %} 
 
 
 {% endblock %}
